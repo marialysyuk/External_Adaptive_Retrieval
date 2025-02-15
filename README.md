@@ -37,7 +37,7 @@ In the folder external features are collected notebooks with the code for their 
     'prob_multihop',
     'prob_difference',
     'prob_count', 'prob_generic'.
-* Context relevance. Train a simple cross-encoder model to identify the relevance score for each of the retrieved context. Collect 4 features: 'context_relevance_min',
+* Context relevance. Train a simple cross-encoder model to identify the relevance score for each of the retrieved context with Context_quality.ipynb. Pretrained model can be downloaded from here[https://drive.google.com/file/d/1MtVkqBu0_lcpWPmmwF7Ccrcyk9Q1nKp2/view?usp=sharing]. Collect 4 features: 'context_relevance_min',
     'context_relevance_max',
     'context_relevance_mean',
     'context_length'.
@@ -48,9 +48,21 @@ In the folder external features are collected notebooks with the code for their 
 Example 
 ```python
 
-! python analyze_all_features_tuned_inaccuracy_long.py --data_path "data_hf/external_rag_hotpotqa_extra_v2.hf"\
+python analyze_all_features_tuned_inaccuracy_long.py --data_path "data_hf/external_rag_hotpotqa_extra_v2.hf"\
                           --no_context_col "new_retriever_adaptive_rag_no_retrieve"\
                           --with_context_col "new_retriever_adaptive_rag_one_retrieve"\
                           --gt_col "reference"\
                           --seed 24
+```
+
+### Evaluate your model on the test using optimal hyperparameters
+
+Example 
+```python
+
+python analyze_all_features_after_grid_search_voting.py --data_path "data_hf/external_rag_natural_questions_extra_v2.hf"\
+                          --no_context_col "new_retriever_adaptive_rag_no_retrieve"\
+                          --with_context_col "new_retriever_adaptive_rag_one_retrieve"\
+                          --gt_col "reference"\
+                          --data_short "natural_questions"
 ```
