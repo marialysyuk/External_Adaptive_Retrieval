@@ -10,7 +10,7 @@ In this study, we introduce lightweight LLM-independent adaptive retrieval metho
 In the folder external features are collected notebooks with the code for their parsing.
 
 * Graph features. First, run BELA.ipynb to find IDs of the entities from Wikidata KG. Then, with Graph_popularity.ipynb collect number of triples for where this entity is either the subject
-  or an object with SPARQL queries. Collect six features as a consequence:
+  or an object with SPARQL queries. Collect 6 features:
   'graph_subj_mean',
     'graph_subj_min',
     'graph_subj_max',
@@ -18,7 +18,39 @@ In the folder external features are collected notebooks with the code for their 
     'graph_obj_min',
     'graph_obj_max'.
 * Frequency features. First, run NER module in BELA.ipynb and find entity label from the question. Then, run Frequency.ipynb and find frequencies of entities in a large corpus of text. Collect
-  four features as a consequence: 'freq_exact_mean',
+  4 features: 'freq_exact_mean',
     'freq_exact_min',
     'freq_exact_max',
     'freq_inexact_min'.
+* Popularity features. First, run NER module in BELA.ipynb and find entity label from the question. Then, run Wikimedia_api.ipynb to collect amount of pageviews of the page with
+  the corresponding label in Wikipedia. Collect 3 features: 'popularity_mean',
+    'popularity_min',
+    'popularity_max',
+    'freq_exact_mean'.
+* Question type. Collect probabilities of the nine possible types of question. First, train a simple bert-based classifier with Question_type_train.ipynb. Then, predict probabilities of
+  nine question types with Predict_type_of_the_question_probas.ipynb. Collect 9 features:
+     'prob_ordinal',
+    'prob_intersection',
+    'prob_superlative',
+    'prob_yesno',
+    'prob_comparative',
+    'prob_multihop',
+    'prob_difference',
+    'prob_count', 'prob_generic'.
+* Context relevance. Train a simple cross-encoder model to identify the relevance score for each of the retrieved context. Collect 4 features: 'context_relevance_min',
+    'context_relevance_max',
+    'context_relevance_mean',
+    'context_length'.
+* Knowledgability. Prompt your model to evaluate its internal knowledgability of the entity. Example for the Llama3.1-8b Instruct can be found in Llama_knowledgability.ipynb.
+
+### Find optimal hyperparameters
+
+Example 
+```python
+
+! python analyze_all_features_tuned_inaccuracy_long.py --data_path "data_hf/external_rag_hotpotqa_extra_v2.hf"\
+                          --no_context_col "new_retriever_adaptive_rag_no_retrieve"\
+                          --with_context_col "new_retriever_adaptive_rag_one_retrieve"\
+                          --gt_col "reference"\
+                          --seed 24
+```
